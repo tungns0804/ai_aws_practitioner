@@ -1,0 +1,161 @@
+<div class="app">
+  <aside id="sidebar" [class.open]="sideOpen()">
+    <app-sidebar
+      (navigated)="closeSide()"
+      (openImport)="openImport()"
+      (openReset)="resetDlg.showModal()"
+    />
+  </aside>
+
+  <main>
+    <div class="topwrap">
+      <div class="topbar">
+        <button class="btn sm" id="menuBtn" (click)="sideOpen.set(true)">
+          {{ i18n.t('app.menu') }}
+        </button>
+        <div class="viewtabs" role="group" [attr.aria-label]="i18n.t('view.group')">
+          <button
+            [class.on]="quiz.view() === 'practice'"
+            [attr.aria-pressed]="quiz.view() === 'practice'"
+            (click)="quiz.setView('practice')"
+          >
+            {{ i18n.t('view.practice') }}
+          </button>
+          <button
+            [class.on]="quiz.view() === 'study'"
+            [attr.aria-pressed]="quiz.view() === 'study'"
+            (click)="quiz.setView('study')"
+          >
+            {{ i18n.t('view.study') }}
+          </button>
+        </div>
+        <div class="sep hide-sm"></div>
+        <div class="stat">
+          {{ i18n.t('top.done') }} <b>{{ quiz.stats().done }}/{{ quiz.stats().total }}</b>
+        </div>
+        <div class="stat good hide-sm">{{ i18n.t('top.ok') }} <b>{{ quiz.stats().ok }}</b></div>
+        <div class="stat bad hide-sm">{{ i18n.t('top.no') }} <b>{{ quiz.stats().no }}</b></div>
+        <div class="stat hide-sm">{{ i18n.t('top.rate') }} <b>{{ quiz.stats().rate }}</b></div>
+        <span class="spacer"></span>
+        <div class="viewtabs langctl" role="group" [attr.aria-label]="i18n.t('top.langGroup')">
+          <button
+            [class.on]="i18n.lang() === 'vi'"
+            [attr.aria-pressed]="i18n.lang() === 'vi'"
+            [title]="i18n.t('top.langHint')"
+            (click)="quiz.setLang('vi')"
+          >
+            VI
+          </button>
+          <button
+            [class.on]="i18n.lang() === 'en'"
+            [attr.aria-pressed]="i18n.lang() === 'en'"
+            [title]="i18n.t('top.langHint')"
+            (click)="quiz.setLang('en')"
+          >
+            EN
+          </button>
+        </div>
+        <div class="sizectl" role="group" [attr.aria-label]="i18n.t('top.sizeGroup')">
+          <button
+            [title]="i18n.t('top.sizeDown')"
+            [attr.aria-label]="i18n.t('top.sizeDown')"
+            [disabled]="quiz.size() === 'md'"
+            (click)="quiz.stepSize(-1)"
+          >
+            A−
+          </button>
+          <button
+            [title]="i18n.t('top.sizeUp')"
+            [attr.aria-label]="i18n.t('top.sizeUp')"
+            [disabled]="quiz.size() === 'xl'"
+            (click)="quiz.stepSize(1)"
+          >
+            A+
+          </button>
+        </div>
+        <button
+          class="btn sm"
+          [attr.aria-pressed]="quiz.showVi()"
+          [title]="i18n.t('top.viHint')"
+          (click)="quiz.toggleVi()"
+        >
+          {{ quiz.showVi() ? i18n.t('top.viOn') : i18n.t('top.viOff') }}
+        </button>
+      </div>
+      <div class="bar"><i [style.width.%]="quiz.stats().pct"></i></div>
+    </div>
+
+    <div class="wrap" [class.study-wrap]="quiz.view() === 'study'">
+      @if (quiz.view() === 'study') {
+        <app-study />
+      } @else {
+        @if (quiz.categoryLabel(); as label) {
+          <div class="scope-bar">
+            <span class="scope-lbl">{{ i18n.t('scope.label') }}</span>
+            <b>{{ label }}</b>
+            <span class="scope-n">{{ i18n.t('common.questions', { n: quiz.order().length }) }}</span>
+            <span class="spacer"></span>
+            <button class="btn sm" (click)="quiz.setCategory(null)">
+              {{ i18n.t('common.clearFilter') }}
+            </button>
+          </div>
+        }
+        <app-question-card />
+      }
+    </div>
+
+    @if (quiz.view() === 'practice') {
+      <div class="navbar">
+        <button class="btn" [disabled]="!quiz.canPrev()" (click)="quiz.go(quiz.idx() - 1)">
+          ← {{ i18n.t('nav.prev') }}
+        </button>
+        <button class="btn" [disabled]="!quiz.canNext()" (click)="quiz.go(quiz.idx() + 1)">
+          {{ i18n.t('nav.next') }} →
+        </button>
+        <span class="spacer"></span>
+        <span class="pos">
+          {{ quiz.order().length ? quiz.idx() + 1 : 0 }} / {{ quiz.order().length }}
+        </span>
+      </div>
+    }
+  </main>
+</div>
+
+<div class="scrim" [class.on]="sideOpen()" (click)="closeSide()"></div>
+
+<div class="toast" [class.show]="toast.visible()" role="status" aria-live="polite">
+  {{ toast.message() }}
+</div>
+
+<dialog #impDlg>
+  <div class="dlg-h">{{ i18n.t('dlg.importTitle') }}</div>
+  <div class="dlg-b">
+    <p>{{ i18n.t('dlg.importBody') }}</p>
+    <input
+      type="file"
+      accept="application/json,.json"
+      style="margin-bottom:10px"
+      (change)="readFile($event)"
+    />
+    <textarea
+      [value]="importText()"
+      (input)="importText.set(textValue($event))"
+      placeholder='{"favorites":[...],"progress":{...},"history":[...]}'
+    ></textarea>
+  </div>
+  <div class="dlg-f">
+    <button class="btn" (click)="impDlg.close()">{{ i18n.t('common.cancel') }}</button>
+    <button class="btn primary" (click)="confirmImport()">{{ i18n.t('dlg.importOk') }}</button>
+  </div>
+</dialog>
+
+<dialog #resetDlg>
+  <div class="dlg-h">{{ i18n.t('dlg.resetTitle') }}</div>
+  <div class="dlg-b">{{ i18n.t('dlg.resetBody') }}</div>
+  <div class="dlg-f">
+    <button class="btn" (click)="resetDlg.close()">{{ i18n.t('dlg.resetKeep') }}</button>
+    <button class="btn primary" (click)="quiz.resetAll(); resetDlg.close()">
+      {{ i18n.t('dlg.resetOk') }}
+    </button>
+  </div>
+</dialog>

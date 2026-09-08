@@ -1,0 +1,4 @@
+# Chuẩn hoá xuống LF trong repo để bản build trên Linux (GitHub Actions) khớp bản build trên Windows.
+* text=auto eol=lf
+*.png binary
+*.ico binary
