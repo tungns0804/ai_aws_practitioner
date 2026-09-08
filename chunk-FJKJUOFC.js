@@ -1,0 +1,1 @@
+import{e as n,o as e}from"./chunk-SB7ZIQVI.js";var o=class i{builtIn=e({});setBuiltIn(t){t&&this.builtIn.set(t)}key(t,r){return t+":"+r}entry(t,r){return this.builtIn()[this.key(t,r)]}static \u0275fac=function(r){return new(r||i)};static \u0275prov=n({token:i,factory:i.\u0275fac,providedIn:"root"})};export{o as a};
