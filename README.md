@@ -20,7 +20,7 @@ npm run build:data   # sinh lại public/aws-aip-*.json từ data/
 | Màn hình | Nội dung |
 |---|---|
 | **Luyện thi** | Làm bài, chấm điểm, ⭐ yêu thích, phiên luyện tập, lịch sử, xuất/nhập JSON, phím tắt |
-| **Học kiến thức** | 5 phần thi × 47 chủ đề theo Exam Guide chính thức, mỗi chủ đề có mô tả tổng quan + link tài liệu AWS + nút **Thi phần này / Thi chủ đề này** |
+| **Học kiến thức** | 5 phần thi × 48 chủ đề theo Exam Guide chính thức, mỗi chủ đề có mô tả tổng quan + link tài liệu AWS + nút **Thi phần này / Thi chủ đề này** |
 
 Chuyển màn hình bằng hai tab ở thanh trên. Ô **Phạm vi ôn tập** ở thanh bên lọc câu hỏi theo phần
 thi hoặc theo chủ đề, và kết hợp được với các chế độ sẵn có (Yêu thích / Cần ôn lại / Chưa làm).
@@ -38,7 +38,7 @@ thi hoặc theo chủ đề, và kết hợp được với các chế độ s�
 | d5 — Security, Compliance, and Governance | 14% | 24 | 13.6% |
 | **Tổng** | | **177** | |
 
-Cả 47 chủ đề trong Exam Guide đều có câu hỏi. Mỗi câu đều có phần giải thích (nêu cả lý do các
+Cả 48 chủ đề trong Exam Guide đều có câu hỏi. Mỗi câu đều có phần giải thích (nêu cả lý do các
 phương án còn lại sai) và **bản dịch tiếng Việt đầy đủ**; phần lớn câu kèm link tài liệu AWS gốc.
 
 Năm dạng câu hỏi: `single` (chọn 1), `multi` (chọn nhiều), `truefalse`, `tf_table` (bảng đúng/sai
@@ -73,7 +73,7 @@ public/aws-aip-data.json   ngân hàng câu hỏi     } sinh ra từ data/, đ�
 public/aws-aip-vi.json     bản dịch tiếng Việt   }
 src/base.css               toàn bộ CSS nền tối (nightlight)
 src/app/core/
-  categories.ts            5 phần thi / 47 chủ đề + mô tả + link tài liệu AWS
+  categories.ts            5 phần thi / 48 chủ đề + mô tả + link tài liệu AWS
   categories.en.ts         bản tiếng Anh của tiêu đề và mô tả chủ đề
   i18n.ts                  từ điển [tiếng Việt, tiếng Anh] cho toàn bộ giao diện
   i18n.service.ts          signal ngôn ngữ + hàm t() thay thế {tham số}
